@@ -128,6 +128,27 @@ int main (int argc, char *argv[]){
 					//execlp(argumentos[2], argumentos[2],NULL);
 				}
 			}
+			//Altera a saída do programa para um arquivo
+			else if(strcmp(argumentos[1],">")==0){
+				int processo = fork();
+				if(processo < 0){
+					fprintf(stderr, "Erro no Fork.\n");
+					exit(1);
+				}
+				else if(processo == 0){
+					close(STDOUT_FILENO);
+					//Criar o arquivo para receber a saida
+					open(argumentos[2], O_CREAT|O_WRONLY|O_TRUNC, S_IRWXU);
+					//Concatenar o comando "./" com o nome do programa
+					strcat(comando, "./");
+					strcat(comando, argumentos[0]);
+					argumentos[0] = comando;
+					execvp(argumentos[0], argumentos);
+				}
+				else{
+					wait(NULL);
+				}
+			}
 		}
 	}
 }
