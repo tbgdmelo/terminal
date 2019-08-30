@@ -21,9 +21,9 @@ int main (int argc, char *argv[]){
 	int i;
 	
 	while(1){
-		printf("Processo (pid:%d)\n", (int) getpid());
+		//printf("Sou o processo (pid:%d)\n", (int) getpid());
 		sleep(1);
-		printf("@modoDeus:~%s# ", diretorio_atual);
+		printf("@modoDeus:D~%s # ", diretorio_atual);
 		
 		scanf("%[^\n]", linha);
 		scanf("%*c");
@@ -148,6 +148,30 @@ int main (int argc, char *argv[]){
 				else{
 					wait(NULL);
 				}
+			}
+			//Alterar entrada do programa para um arquivo
+			else if(strcmp(argumentos[1],"<")==0){
+				int processo = fork();
+				if(processo < 0){
+					fprintf(stderr, "Erro no Fork.\n");
+					exit(1);
+				}
+				else if(processo == 0){
+					//Abre o arquivo e redireciona o padrão para stdin
+					freopen(argumentos[2], "r", stdin);
+					//Concatenar o comando "./" com o nome do programa
+					strcat(comando, "./");
+					strcat(comando, argumentos[0]);
+					argumentos[0] = comando;
+					execvp(argumentos[0], argumentos);
+					
+				}
+				else{
+					wait(NULL);
+				}
+			}
+			else{
+				printf("Comando indisponível. \nVerifique a sintaxe. :)\n");
 			}
 		}
 	}
