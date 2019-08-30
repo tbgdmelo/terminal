@@ -2,6 +2,7 @@ Este é um proto-terminal desenvolvido em Linguagem C.
 Atividade de Sistemas de Computação.
 
 O terminal executa os comandos:
+
 1 - muda diretório [cd] Ex: cd pasta
 2 - exibe em qual diretório está [pwd]
 3 - executa um programa quando digitado apenas o nome do programa
