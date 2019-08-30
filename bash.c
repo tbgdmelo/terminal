@@ -27,7 +27,6 @@ int main (int argc, char *argv[]){
 		
 		scanf("%[^\n]", linha);
 		scanf("%*c");
-		fflush(stdin);
 		//Separar as palavras por espaço
 		i=0;
 		palavra = strtok(linha, " ");
@@ -103,6 +102,7 @@ int main (int argc, char *argv[]){
 					exit(1);
 				}
 				else if(processo == 0){
+					//Configura os descritores
 					close(1);
 					dup(arq_desc[1]);
 					close(arq_desc[1]);
@@ -115,6 +115,7 @@ int main (int argc, char *argv[]){
 					//execlp(argumentos[0], argumentos[0],NULL);
 				}
 				else{
+					//Configura os descritores
 					close(0);
 					dup(arq_desc[0]);
 					close(arq_desc[0]);
