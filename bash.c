@@ -28,7 +28,6 @@ int main (int argc, char *argv[]){
 		scanf("%[^\n]", linha);
 		scanf("%*c");
 		fflush(stdin);
-
 		//Separar as palavras por espaço
 		i=0;
 		palavra = strtok(linha, " ");
@@ -76,7 +75,6 @@ int main (int argc, char *argv[]){
 					printf("\nExecutando o programa...\n");
 					sleep(1);
 
-					
 					//Concatenar o comando "./" com o nome do programa
 					strcat(comando, "./");
 					strcat(comando, argumentos[0]);
@@ -90,34 +88,45 @@ int main (int argc, char *argv[]){
 			}
 			//Liga a saída do primeiro executável à entrada do segundo via um PIPE
 			else if(strcmp(argumentos[1],"|")==0){
+				int arq_desc[2];
+
+				//Criar o Pipe
+				if(pipe(arq_desc) < 0){
+					fprintf(stderr, "Erro no Pipe.\n");
+					exit(1);
+				}
+				//fprintf(stderr, "%d %d\n", arq_desc[0], arq_desc[1]);
 				int processo = fork();
-				
-				//Falha no Fork
+
 				if(processo < 0){
 					fprintf(stderr, "Erro no Fork.\n");
 					exit(1);
 				}
 				else if(processo == 0){
-					//Concatenar o comando "./" com o nome do programa 2
-					strcat(comando, "./");
-					strcat(comando, argumentos[2]);
-					argumentos[2] = comando;
-					strcpy(comando,"");
-					
-					open();
-
-					//Concatenar o comando "./" com o nome do programa 2
+					close(1);
+					dup(arq_desc[1]);
+					close(arq_desc[1]);
+					close(arq_desc[0]);
+					//Concatenar o comando "./" com o nome do programa
 					strcat(comando, "./");
 					strcat(comando, argumentos[0]);
 					argumentos[0] = comando;
 					execvp(argumentos[0], argumentos);
-
+					//execlp(argumentos[0], argumentos[0],NULL);
 				}
 				else{
-					wait(NULL);
+					close(0);
+					dup(arq_desc[0]);
+					close(arq_desc[0]);
+					close(arq_desc[1]);
+					//Concatenar o comando "./" com o nome do programa
+					strcat(comando, "./");
+					strcat(comando, argumentos[2]);
+					argumentos[2] = comando;
+					execvp(argumentos[2], argumentos);
+					//execlp(argumentos[2], argumentos[2],NULL);
 				}
 			}
 		}
-
 	}
 }
