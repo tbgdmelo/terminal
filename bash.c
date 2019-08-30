@@ -1,3 +1,10 @@
+/*
+Developed by: Thiago Braga de Melo
+ICOMP - Instituto de Computação
+UFAM - Universidade Federal do Amazonas
+tbm@icomp.ufam.edu.br
+Atividade: Proto Terminal - Sistemas Operacionais
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
